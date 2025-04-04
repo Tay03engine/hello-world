@@ -1,0 +1,29 @@
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
+
+public class KeyPadCustomPane extends KeyPadPane {
+
+    private PasswordField pinField;
+    private Label statusLabel;
+
+    public KeyPadCustomPane(PasswordField pinField, Label statusLabel) {
+        this.pinField = pinField;
+        this.statusLabel = statusLabel;
+
+        registerEventHandlers(); // Attach custom behavior
+    }
+
+    @Override
+    protected void registerEventHandlers() {
+        for (Button btn : listButtons) {
+            btn.setOnAction(e -> {
+                String digit = btn.getText().trim();
+                if (digit.matches("[0-9]") && pinField.getText().length() < 4) {
+                    pinField.appendText(digit);
+                    statusLabel.setText("");
+                }
+            });
+        }
+    }
+}
