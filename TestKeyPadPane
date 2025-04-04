@@ -1,0 +1,76 @@
+/**
+ * This program simulates an ATM PIN entry using a JavaFX keypad.
+ * 
+ * GitHub Hello World Tutorial:
+ * https://github.com/octocat/Hello-World
+ */
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+
+public class TestKeyPadPane extends Application {
+
+    private PasswordField pinField;
+    private Label statusLabel;
+
+    @Override
+    public void start(Stage primaryStage) {
+        BorderPane mainPane = new BorderPane();
+
+        // Top section with label and PIN field
+        Label promptLabel = new Label("Enter your PIN:");
+        pinField = new PasswordField();
+        pinField.setEditable(false);
+        pinField.setMaxWidth(150);
+
+        statusLabel = new Label(); // Shows feedback
+
+        VBox topPane = new VBox(10, promptLabel, pinField, statusLabel);
+        topPane.setAlignment(Pos.CENTER);
+
+        // Center section with keypad
+        KeyPadCustomPane keyPane = new KeyPadCustomPane(pinField, statusLabel);
+
+        // Bottom section with clear/submit
+        Button clearBtn = new Button("Clear");
+        Button submitBtn = new Button("Submit");
+
+        clearBtn.setOnAction(e -> {
+            pinField.clear();
+            statusLabel.setText("");
+        });
+
+        submitBtn.setOnAction(e -> {
+            if (pinField.getText().equals("1234")) {
+                statusLabel.setText("Access Granted ");
+            } else {
+                statusLabel.setText("Incorrect PIN ");
+            }
+        });
+
+        HBox bottomPane = new HBox(10, clearBtn, submitBtn);
+        bottomPane.setAlignment(Pos.CENTER);
+
+        VBox centerPane = new VBox(10, keyPane, bottomPane);
+        centerPane.setAlignment(Pos.CENTER);
+
+        // Place everything in main pane
+        mainPane.setTop(topPane);
+        mainPane.setCenter(centerPane);
+
+        Scene scene = new Scene(mainPane, 300, 400);
+        primaryStage.setTitle("ATM PIN Entry");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
